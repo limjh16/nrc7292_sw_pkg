@@ -46,11 +46,11 @@ def terminal(cmd, disp=False):
 # sshpass
 def sshpass(name, type_, option, disp=False, err=False):
 	err_redirect = ' &> /dev/null' if err else ' > /dev/null'
-	return terminal("/usr/bin/sshpass -p 'antjslan' ssh pi@nrc-halow-{} python /home/pi/{}-interface/config_{}.py {}{}".format(name, type_, type_, option, err_redirect), disp)
+	return terminal("/usr/bin/sshpass -p 'antjslan' ssh pi@nrc-halow-{0} python {5}/{1}-interface/config_{2}.py {3}{4}".format(name, type_, type_, option, err_redirect, os.path.expanduser("~")), disp)
 
 # Reset
 def reset(name, type_, retry=10):
-	res = terminal("python /home/pi/hub-interface/hub.py --reset="+name, True)
+	res = terminal(f"python {os.path.expanduser("~")}/hub-interface/hub.py --reset="+name, True)
 	option = "--run test"
 	if res == 0:
 		time.sleep(10)

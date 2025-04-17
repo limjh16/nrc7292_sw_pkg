@@ -34,41 +34,41 @@ def run_ap():
 	print "[run ap]"
 	os.system("sudo killall -9 hostapd")
 	os.system("sudo rmmod nrc")
-	os.system("sudo insmod /home/pi/nrc/nrc.ko hifspeed=16000000 power_save=1 fw_name=nrc7292_cspi.bin")
+	os.system(f"sudo insmod {os.path.expanduser("~")}/nrc/nrc.ko hifspeed=16000000 power_save=1 fw_name=nrc7292_cspi.bin")
 	time.sleep(5)
-	os.system('python /home/pi/nrc/test/netlink/shell.py run --cmd="phy rxgain 50"')
+	os.system(f'python {os.path.expanduser("~")}/nrc/test/netlink/shell.py run --cmd="phy rxgain 50"')
 	time.sleep(1)
-	os.system('python /home/pi/nrc/test/netlink/shell.py run --cmd="phy txgain 1"')
+	os.system(f'python {os.path.expanduser("~")}/nrc/test/netlink/shell.py run --cmd="phy txgain 1"')
 	time.sleep(1)
-	os.system('python /home/pi/nrc/test/netlink/shell.py run --cmd="set capa_1m off on"')
+	os.system(f'python {os.path.expanduser("~")}/nrc/test/netlink/shell.py run --cmd="set capa_1m off on"')
 	time.sleep(1)
-	os.system("sudo hostapd /home/pi/nrc/test/ap_halow_ins_rm_test.conf &")
+	os.system(f"sudo hostapd {os.path.expanduser("~")}/nrc/test/ap_halow_ins_rm_test.conf &")
 	time.sleep(3)
 
 def run_sta():
 	global start_time
 	global curr_test_cnt
 
-	print "[run sta]" 
+	print "[run sta]"
 
 	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo killall -9 wpa_supplicant'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
 	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo rmmod nrc'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
 	time.sleep(1)
-	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo insmod /home/pi/nrc/nrc.ko power_save=0 hifspeed=16000000 fw_name=nrc7292_cspi.bin'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
+	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo insmod {3}/nrc/nrc.ko power_save=0 hifspeed=16000000 fw_name=nrc7292_cspi.bin'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP, os.path.expanduser("~")))
 	time.sleep(5)
-	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python /home/pi/nrc/test/netlink/shell.py run --cmd=\"phy rxgain 50\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
+	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python {3}/nrc/test/netlink/shell.py run --cmd=\"phy rxgain 50\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP, os.path.expanduser("~")))
 	time.sleep(1)
-	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python /home/pi/nrc/test/netlink/shell.py run --cmd=\"phy txgain 1\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
+	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python {3}/nrc/test/netlink/shell.py run --cmd=\"phy txgain 1\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP, os.path.expanduser("~")))
 	time.sleep(1)
-	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python /home/pi/nrc/test/netlink/shell.py run --cmd=\"set capa_1m off on\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
+	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'python {3}/nrc/test/netlink/shell.py run --cmd=\"set capa_1m off on\"'".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP, os.path.expanduser("~")))
 	time.sleep(1)
-	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo wpa_supplicant -Dnl80211 -iwlan0 -c /home/pi/nrc/test/sta_halow_ins_rm_test.conf &' &".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP))
+	os.system("sshpass -p{0} ssh -o StrictHostKeyChecking=no {1}@{2} 'sudo wpa_supplicant -Dnl80211 -iwlan0 -c {3}/nrc/test/sta_halow_ins_rm_test.conf &' &".format(STA_HOST_PW, STA_HOST_NAME, STA_ETH_IP, os.path.expanduser("~")))
 	start_time = int(round(time.time()*1000))
 	curr_test_cnt += 1
-	
+
 def check_connection():
 	subcommand = "sudo wpa_cli -iwlan0 status | grep ip_address={0}".format(AP_IP_SUB)
-	cmd = ["sshpass", "-p{0}".format(STA_HOST_PW), "ssh", "-o", "StrictHostKeyChecking=no", "{0}@{1}".format(STA_HOST_NAME, STA_ETH_IP), subcommand] 
+	cmd = ["sshpass", "-p{0}".format(STA_HOST_PW), "ssh", "-o", "StrictHostKeyChecking=no", "{0}@{1}".format(STA_HOST_NAME, STA_ETH_IP), subcommand]
 	p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	data = p.communicate()
 	string = data[0]
