@@ -778,6 +778,7 @@ def run_sta(interface):
     if strSecurity() == 'OPEN':
         os.system("sudo wpa_supplicant -i" + interface + " -c " + os.path.expanduser("~") + "/nrc_pkg/script/conf/" + country + "/sta_halow_open.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA2-PSK':
+        print("sudo wpa_supplicant -i" + interface + " -c " + os.path.expanduser("~") + "/nrc_pkg/script/conf/" + country + "/sta_halow_wpa2.conf " + bridge + debug + " &")
         os.system("sudo wpa_supplicant -i" + interface + " -c " + os.path.expanduser("~") + "/nrc_pkg/script/conf/" + country + "/sta_halow_wpa2.conf " + bridge + debug + " &")
     elif strSecurity() == 'WPA3-OWE':
         os.system("sudo wpa_supplicant -i" + interface + " -c " + os.path.expanduser("~") + "/nrc_pkg/script/conf/" + country + "/sta_halow_owe.conf " + bridge + debug + " &")
