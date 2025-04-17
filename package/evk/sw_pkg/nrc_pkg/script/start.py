@@ -730,6 +730,7 @@ def run_common():
         addMeshInterface('mesh0')
 
     ret = subprocess.call(["sudo", "ifconfig", "wlan0", "up"])
+    os.system("sudo nmcli dev set wlan0 managed no")
     if ret == 255:
         os.system('sudo rmmod nrc.ko')
         sys.exit()
