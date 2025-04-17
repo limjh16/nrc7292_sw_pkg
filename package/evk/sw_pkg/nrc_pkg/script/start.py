@@ -751,7 +751,7 @@ def run_common():
 
 def run_sta(interface):
     country = str(sys.argv[3])
-    os.system("sudo killall -9 wpa_supplicant")
+    # os.system("sudo killall -9 wpa_supplicant") # already killing in run_common
 
     if int(use_bridge_setup) > 0:
         bridge = '-b br0 '
