@@ -8,11 +8,11 @@ script_path = os.path.expanduser("~") + "/nrc_pkg/script/"
 # Default Configuration (you can change value you want here)
 ##################################################################################
 # Raspbery Pi Conf.
-max_cpuclock      = 1         # Set Max CPU Clock : 0(off) or 1(on)
+max_cpuclock      = 0         # Set Max CPU Clock : 0(off) or 1(on)
 ##################################################################################
 # Firmware Conf.
 model             = 7292      # 7292/7393/7394
-fw_download       = 1         # 0(FW Download off) or 1(FW Download on)
+fw_download       = 0         # 0(FW Download off) or 1(FW Download on)
 fw_name           = 'uni_s1g.bin'
 ##################################################################################
 # DEBUG Conf.
