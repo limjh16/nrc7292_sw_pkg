@@ -694,8 +694,8 @@ def run_common():
 
     print("[0] Clear")
     os.system("sudo hostapd_cli disable")
-    os.system("sudo wpa_cli disable wlan0")
-    os.system("sudo wpa_cli disable wlan1")
+    os.system("sudo ip link set wlan0 down")
+    os.system("sudo ip link set wlan1 down")
     os.system("sudo killall -9 wpa_supplicant")
     os.system("sudo killall -9 hostapd")
     os.system("sudo killall -9 wireshark")
